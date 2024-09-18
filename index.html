@@ -5,213 +5,293 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mood Diary</title>
     <style>
-        /* Basic styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
         }
-        
+
         header {
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            padding: 15px 0;
             text-align: center;
+            font-size: 24px;
         }
-        
-        #entriesContainer {
+
+        main {
             padding: 20px;
+            max-width: 900px;
+            margin: auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        
-        .entry {
-            border: 1px solid #ddd;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        
-        .entry.happy { border-left: 5px solid yellow; }
-        .entry.sad { border-left: 5px solid blue; }
-        .entry.angry { border-left: 5px solid red; }
-        
-        #entryForm, #feedbackForm, #profileForm {
-            margin: 20px;
-        }
-        
-        textarea {
-            width: 100%;
-            height: 100px;
-            margin-bottom: 10px;
-        }
-        
+
         button {
-            background-color: #007bff;
-            color: white;
+            padding: 10px 20px;
+            margin: 5px;
             border: none;
-            padding: 10px;
-            margin-right: 5px;
+            color: #fff;
             cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
-        
-        button:hover {
+
+        .profile-button {
+            background-color: #007bff;
+        }
+
+        .profile-button:hover {
             background-color: #0056b3;
         }
-        
-        #tagsContainer {
-            margin: 20px;
+
+        .feedback-button {
+            background-color: #28a745;
         }
-        
-        .tag {
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            padding: 5px;
-            margin: 5px;
-            display: inline-block;
+
+        .feedback-button:hover {
+            background-color: #218838;
         }
-        
-        .tag button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: red;
-            font-size: 1.2em;
-        }
-        
-        #entryPreview {
+
+        .modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
             justify-content: center;
+            align-items: center;
         }
-        
+
         .modal-content {
-            background: white;
+            background: #fff;
             padding: 20px;
-            border-radius: 5px;
-            width: 80%;
-            max-width: 600px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
             position: relative;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
         }
-        
-        .closePreview {
+
+        .close {
             position: absolute;
             top: 10px;
             right: 10px;
-            font-size: 1.5em;
             cursor: pointer;
+            font-size: 24px;
         }
-        
-        /* Dark mode styles */
-        body.dark-mode {
-            background-color: #121212;
-            color: #ffffff;
+
+        .modal-content input, .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
-        
-        body.dark-mode header {
-            background-color: #1e1e1e;
+
+        .modal-content button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
         }
-        
-        body.dark-mode .entry {
-            background-color: #1e1e1e;
-            color: #ffffff;
+
+        .modal-content button:hover {
+            background-color: #0056b3;
         }
-        
-        /* Responsive design */
-        @media (max-width: 600px) {
-            .entry {
-                font-size: 14px;
-                padding: 5px;
-            }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        textarea {
+            width: calc(100% - 22px);
+            height: 150px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .entry-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+        }
+
+        .entry-container h3 {
+            margin-top: 0;
+        }
+
+        .entry-container .entry-text {
+            white-space: pre-wrap;
+            margin-bottom: 10px;
+        }
+
+        .entry-container .entry-mood {
+            font-style: italic;
+            color: #6c757d;
+        }
+
+        .entry-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .entry-list li {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .entry-list li:last-child {
+            border-bottom: none;
+        }
+
+        .history {
+            margin-top: 40px;
+        }
+
+        .history h2 {
+            margin-bottom: 20px;
+        }
+
+        .affirmation {
+            font-style: italic;
+            color: #2e8b57;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>Mood Diary</h1>
-        <button id="darkModeToggle">Toggle Dark Mode</button>
     </header>
-    
+
     <main>
-        <section id="entriesContainer">
-            <!-- Entries will be dynamically added here -->
-        </section>
-        
-        <section id="entryForm">
-            <textarea id="note" placeholder="Write your entry here..."></textarea>
-            <input type="text" id="tagInput" placeholder="Add tags..." />
-            <select id="moodColorSelect">
-                <option value="happy">Happy</option>
-                <option value="sad">Sad</option>
-                <option value="angry">Angry</option>
-                <option value="neutral">Neutral</option>
+        <button class="profile-button" onclick="openProfile()">Manage Profile</button>
+        <button class="feedback-button" onclick="openFeedback()">Leave Feedback</button>
+
+        <h2>New Diary Entry</h2>
+        <div class="form-group">
+            <label for="diaryEntry">Your Entry:</label>
+            <textarea id="diaryEntry" placeholder="What's on your mind?"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="mood">Your Mood:</label>
+            <select id="mood" onchange="displayAffirmation()">
+                <option value="">Select Mood</option>
+                <option value="Happy">Happy</option>
+                <option value="Sad">Sad</option>
+                <option value="Angry">Angry</option>
+                <option value="Excited">Excited</option>
+                <option value="Anxious">Anxious</option>
+                <option value="Calm">Calm</option>
+                <option value="Tired">Tired</option>
+                <option value="Motivated">Motivated</option>
+                <option value="Stressed">Stressed</option>
             </select>
-            <button id="addEntry">Add Entry</button>
-            <button id="previewEntry">Preview Entry</button>
-            <button id="exportCSV">Export to CSV</button>
-        </section>
-        
-        <section id="tagsContainer"></section>
-        
-        <section id="feedbackForm">
-            <h2>Feedback</h2>
-            <textarea id="feedback" placeholder="Your feedback..."></textarea>
-            <button id="submitFeedback">Submit</button>
-        </section>
+        </div>
 
-        <section id="profileForm">
-            <h2>Update Profile</h2>
-            <input type="text" id="username" placeholder="Username" />
-            <input type="email" id="email" placeholder="Email" />
-            <button id="updateProfile">Update Profile</button>
-        </section>
+        <button onclick="saveEntry()">Save Entry</button>
+        <button onclick="clearEntries()">Clear All Entries</button>
 
-        <section id="calendar">
-            <input type="text" id="datePicker" placeholder="Select a date" />
-        </section>
-        
-        <section id="audioNotes">
-            <button id="startRecording">Start Recording</button>
-            <button id="stopRecording" disabled>Stop Recording</button>
-            <audio id="audioPlayer" controls></audio>
-        </section>
+        <div class="form-group">
+            <div id="affirmationContainer" class="affirmation"></div>
+        </div>
+
+        <div class="entry-container" id="entryPreview" style="display: none;">
+            <h3>Entry Preview</h3>
+            <div class="entry-text" id="entryText"></div>
+            <div class="entry-mood" id="entryMood"></div>
+        </div>
+
+        <div class="history">
+            <h2>Past Entries</h2>
+            <ul id="entryList" class="entry-list">
+                <!-- Entries will be dynamically populated here -->
+            </ul>
+        </div>
     </main>
 
-    <div id="entryPreview" class="modal">
+    <div id="profileSection" class="modal">
         <div class="modal-content">
-            <span class="closePreview">&times;</span>
-            <p id="previewContent"></p>
+            <span class="close" onclick="closeProfile()">&times;</span>
+            <h2>Profile</h2>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="bio">Bio:</label>
+                <textarea id="bio" placeholder="Bio"></textarea>
+            </div>
+            <button onclick="saveProfile()">Save Profile</button>
         </div>
     </div>
 
+    <div id="feedbackSection" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeFeedback()">&times;</span>
+            <h2>Feedback</h2>
+            <div class="form-group">
+                <label for="feedback">Your Feedback:</label>
+                <textarea id="feedback" placeholder="Your feedback here..."></textarea>
+            </div>
+            <button onclick="sendFeedback()">Submit Feedback</button>
+        </div>
+    </div>
+
+    <div id="entryPreviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePreview()">&times;</span>
+            <h2>Preview</h2>
+            <div id="previewContent"></div>
+        </div>
+    </div>
+
+    <div class="overlay" onclick="closeModal()"></div>
+
     <script>
-        // Auto-Save Feature
-        function autoSaveEntry() {
-            const noteContent = document.querySelector('#note').value;
-            localStorage.setItem('savedEntry', noteContent);
-        }
-
-        document.querySelector('#note').addEventListener('input', () => {
-            autoSaveEntry();
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedEntry = localStorage.getItem('savedEntry');
-            if (savedEntry) {
-                document.querySelector('#note').value = savedEntry;
-            }
-        });
-
-        // Dark Mode Toggle
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-        }
-
-        document.querySelector('#darkModeToggle').addEventListener('click', toggleDarkMode);
-    </script>
-</body>
-  </html>
+        const affirmations = {
+            Happy: 'Keep shining and spreading your joy!',
+            Sad: 'This too shall pass. You are stronger than you think.',
+            Motivated: 'Keep pushing forward. Your efforts will pay off!',
+            Stressed: 'Take a deep breath. You’ve got this. Stay calm and focused.',
+            Anxious: 'Focus on what you can control. Take one step at a time.',
+            Angry: 'Channel your energy into something productive.',
+            Excited: 'Embrace your excitement. Let it fuel your day.',
+            Calm: 'Enjoy this peaceful moment
