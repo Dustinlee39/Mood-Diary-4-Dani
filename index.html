@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+l<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mood Diary</title>
     <style>
+        /* Enhanced CSS styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -37,7 +38,11 @@
             color: #fff;
             cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
         }
 
         .profile-button {
@@ -66,6 +71,7 @@
             background: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
+            transition: opacity 0.3s;
         }
 
         .modal-content {
@@ -76,6 +82,7 @@
             max-width: 500px;
             position: relative;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s;
         }
 
         .close {
@@ -174,6 +181,9 @@
         .entry-list li {
             border-bottom: 1px solid #ddd;
             padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .entry-list li:last-child {
@@ -193,6 +203,12 @@
             color: #2e8b57;
             margin-top: 10px;
         }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -207,7 +223,7 @@
         <h2>New Diary Entry</h2>
         <div class="form-group">
             <label for="diaryEntry">Your Entry:</label>
-            <textarea id="diaryEntry" placeholder="What's on your mind?"></textarea>
+            <textarea id="diaryEntry" placeholder="What's on your mind?" oninput="livePreview()"></textarea>
         </div>
 
         <div class="form-group">
@@ -240,58 +256,209 @@
         </div>
 
         <div class="history">
-            <h2>Past Entries</h2>
-            <ul id="entryList" class="entry-list">
-                <!-- Entries will be dynamically populated here -->
+            <h2>Past Entries</
+            </h2>
+            <ul class="entry-list" id="entryList">
+                <!-- Entries will be dynamically added here -->
             </ul>
         </div>
     </main>
 
-    <div id="profileSection" class="modal">
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeProfile()">&times;</span>
-            <h2>Profile</h2>
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" placeholder="Username">
-            </div>
-            <div class="form-group">
-                <label for="bio">Bio:</label>
-                <textarea id="bio" placeholder="Bio"></textarea>
-            </div>
+            <h2>Manage Profile</h2>
+            <label for="profileName">Name:</label>
+            <input type="text" id="profileName" placeholder="Enter your name">
+            <label for="profileBio">Bio:</label>
+            <textarea id="profileBio" placeholder="Tell us about yourself"></textarea>
             <button onclick="saveProfile()">Save Profile</button>
         </div>
     </div>
 
-    <div id="feedbackSection" class="modal">
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeFeedback()">&times;</span>
-            <h2>Feedback</h2>
-            <div class="form-group">
-                <label for="feedback">Your Feedback:</label>
-                <textarea id="feedback" placeholder="Your feedback here..."></textarea>
-            </div>
-            <button onclick="sendFeedback()">Submit Feedback</button>
+            <h2>Leave Feedback</h2>
+            <label for="feedbackText">Your Feedback:</label>
+            <textarea id="feedbackText" placeholder="We value your feedback"></textarea>
+            <button onclick="submitFeedback()">Submit Feedback</button>
         </div>
     </div>
 
-    <div id="entryPreviewModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closePreview()">&times;</span>
-            <h2>Preview</h2>
-            <div id="previewContent"></div>
-        </div>
-    </div>
-
-    <div class="overlay" onclick="closeModal()"></div>
-
+    <!-- JavaScript Code -->
     <script>
-        const affirmations = {
-            Happy: 'Keep shining and spreading your joy!',
-            Sad: 'This too shall pass. You are stronger than you think.',
-            Motivated: 'Keep pushing forward. Your efforts will pay off!',
-            Stressed: 'Take a deep breath. You’ve got this. Stay calm and focused.',
-            Anxious: 'Focus on what you can control. Take one step at a time.',
-            Angry: 'Channel your energy into something productive.',
-            Excited: 'Embrace your excitement. Let it fuel your day.',
-            Calm: 'Enjoy this peaceful moment
+        // Open and close modal functions
+        function openProfile() {
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+
+        function closeProfile() {
+            document.getElementById('profileModal').style.display = 'none';
+        }
+
+        function openFeedback() {
+            document.getElementById('feedbackModal').style.display = 'flex';
+        }
+
+        function closeFeedback() {
+            document.getElementById('feedbackModal').style.display = 'none';
+        }
+
+        // Save profile data
+        function saveProfile() {
+            const name = document.getElementById('profileName').value;
+            const bio = document.getElementById('profileBio').value;
+            localStorage.setItem('profileName', name);
+            localStorage.setItem('profileBio', bio);
+            alert('Profile saved successfully!');
+            closeProfile();
+        }
+
+        // Live preview for diary entry
+        function livePreview() {
+            const entryText = document.getElementById('diaryEntry').value;
+            const mood = document.getElementById('mood').value;
+            const entryTextElement = document.getElementById('entryText');
+            const entryMoodElement = document.getElementById('entryMood');
+
+            entryTextElement.textContent = entryText;
+            entryMoodElement.textContent = mood ? `Mood: ${mood}` : '';
+
+            document.getElementById('entryPreview').style.display = entryText ? 'block' : 'none';
+        }
+
+        // Display affirmation based on mood
+        function displayAffirmation() {
+            const mood = document.getElementById('mood').value;
+            const affirmationContainer = document.getElementById('affirmationContainer');
+
+            let affirmation = '';
+            switch (mood) {
+                case 'Happy':
+                    affirmation = 'Keep spreading joy!';
+                    break;
+                case 'Sad':
+                    affirmation = 'It\'s okay to feel sad. This too shall pass.';
+                    break;
+                case 'Angry':
+                    affirmation = 'Take a deep breath. You\'ve got this.';
+                    break;
+                case 'Excited':
+                    affirmation = 'Let your excitement fuel your day!';
+                    break;
+                case 'Anxious':
+                    affirmation = 'You are stronger than your anxiety.';
+                    break;
+                case 'Calm':
+                    affirmation = 'Embrace the peace within you.';
+                    break;
+                case 'Tired':
+                    affirmation = 'Rest up. You deserve it.';
+                    break;
+                case 'Motivated':
+                    affirmation = 'Keep pushing forward!';
+                    break;
+                case 'Stressed':
+                    affirmation = 'Take it one step at a time.';
+                    break;
+                default:
+                    affirmation = '';
+            }
+
+            affirmationContainer.textContent = affirmation;
+        }
+
+        // Save diary entry to localStorage
+        function saveEntry() {
+            const entryText = document.getElementById('diaryEntry').value;
+            const mood = document.getElementById('mood').value;
+
+            if (!entryText) {
+                alert('Please enter some text for your diary entry.');
+                return;
+            }
+
+            const entries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
+            entries.push({ text: entryText, mood: mood });
+            localStorage.setItem('diaryEntries', JSON.stringify(entries));
+
+            alert('Entry saved successfully!');
+            displayEntries();
+            clearForm();
+        }
+
+        // Display all diary entries
+        function displayEntries() {
+            const entries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
+            const entryList = document.getElementById('entryList');
+            entryList.innerHTML = '';
+
+            entries.forEach((entry, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div>
+                        <div class="entry-text">${entry.text}</div>
+                        <div class="entry-mood">Mood: ${entry.mood}</div>
+                    </div>
+                    <button onclick="deleteEntry(${index})">Delete</button>
+                `;
+                entryList.appendChild(li);
+            });
+        }
+
+        // Clear form after saving an entry
+        function clearForm() {
+            document.getElementById('diaryEntry').value = '';
+            document.getElementById('mood').value = '';
+            livePreview();
+        }
+
+        // Delete a specific entry
+        function deleteEntry(index) {
+            const entries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
+            entries.splice(index, 1);
+            localStorage.setItem('diaryEntries', JSON.stringify(entries));
+            displayEntries();
+        }
+
+        // Clear all diary entries
+        function clearEntries() {
+            if (confirm('Are you sure you want to delete all entries?')) {
+                localStorage.removeItem('diaryEntries');
+                displayEntries();
+            }
+        }
+
+        // Submit feedback
+        function submitFeedback() {
+            const feedback = document.getElementById('feedbackText').value;
+            if (!feedback) {
+                alert('Please enter your feedback.');
+                return;
+            }
+
+            // You can add code here to send feedback to the server
+            alert('Thank you for your feedback!');
+            document.getElementById('feedbackText').value = '';
+            closeFeedback();
+        }
+
+        // Load saved profile and entries on page load
+        window.onload = function() {
+            const profileName = localStorage.getItem('profileName');
+            const profileBio = localStorage.getItem('profileBio');
+            if (profileName) {
+                document.getElementById('profileName').value = profileName;
+            }
+            if (profileBio) {
+                document.getElementById('profileBio').value = profileBio;
+            }
+
+            displayEntries();
+        };
+    </script>
+</body>
+</html>,
