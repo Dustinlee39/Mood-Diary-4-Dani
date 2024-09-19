@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Diary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .diary-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 0;
+            font-size: 1.2em;
+        }
+        textarea, input {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .example {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        #previous-entries {
+            margin-top: 20px;
+        }
+        .diary-entry {
+            background: #ecf0f1;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .diary-entry h3 {
+            margin-top: 0;
+            color: #2980b9;
+        }
+        .diary-entry p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="diary-container">
+        <h1>Mood Diary</h1>
+        
+        <!-- Diary Form -->
+        <form id="mood-diary-form">
+            <!-- Date and Time -->
+            <div class="section">
+                <h2>Date and Time</h2>
+                <input type="datetime-local" id="date-time" name="date-time" required>
+            </div>
+
+            <!-- Mood Rating -->
+            <div class="section">
+                <h2>Mood Rating</h2>
+                <input type="number" id="mood-rating" name="mood-rating" min="1" max="10" placeholder="Rate your mood from 1 to 10" required>
+            </div>
+
+            <!-- Stress Level -->
+            <div class="section">
+                <h2>Stress Level</h2>
+                <input type="number" id="stress-level" name="stress-level" min="1" max="10" placeholder="Rate your stress level from 1 to 10" required>
+            </div>
+
+            <!-- Mood Description -->
+            <div class="section">
+                <h2>Mood Description</h2>
+                <textarea id="mood-description" name="mood-description" rows="3" placeholder="Describe your mood in a few words..." required></textarea>
+            </div>
+
+            <!-- Triggers or Events -->
+            <div class="section">
+                <h2>Triggers or Events</h2>
+                <textarea id="triggers-events" name="triggers-events" rows="3" placeholder="What influenced your mood today?"></textarea>
+            </div>
+
+            <!-- Physical Sensations -->
+            <div class="section">
+                <h2>Physical Sensations</h2>
+                <textarea id="physical-sensations" name="physical-sensations" rows="3" placeholder="How did you feel physically?"></textarea>
+            </div>
+
+            <!-- Thoughts -->
+            <div class="section">
+                <h2>Thoughts</h2>
+                <textarea id="thoughts" name="thoughts" rows="3" placeholder="What thoughts are on your mind?"></textarea>
+            </div>
+
+            <!-- Behavioral Responses -->
+            <div class="section">
+                <h2>Behavioral Responses</h2>
+                <textarea id="behavioral-responses" name="behavioral-responses" rows="3" placeholder="How did you react to your mood?"></textarea>
+            </div>
+
+            <!-- Activities and Lifestyle Factors -->
+            <div class="section">
+                <h2>Activities and Lifestyle Factors</h2>
+                <textarea id="activities-lifestyle" name="activities-lifestyle" rows="3" placeholder="How did sleep, diet, or exercise affect you?"></textarea>
+            </div>
+
+            <!-- Self-Care Actions -->
+            <div class="section">
+                <h2>Self-Care Actions</h2>
+                <textarea id="self-care-actions" name="self-care-actions" rows="3" placeholder="What self-care actions did you take?"></textarea>
+            </div>
+
+            <!-- Notes for Reflection -->
+            <div class="section">
+                <h2>Notes for Reflection</h2>
+                <textarea id="notes-reflection" name="notes-reflection" rows="3" placeholder="Reflect on your day..."></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="section">
+                <button type="submit">Submit Diary Entry</button>
+            </div>
+        </form>
+
+        <!-- Previous Diary Entries -->
+        <div id="previous-entries" class="section">
+            <h2>Previous Diary Entries</h2>
+            <!-- Diary entries will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('#mood-diary-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form from refreshing the page
+
+            // Collect form data
+            const formData = new FormData(event.target);
+            const formEntries = Object.fromEntries(formData.entries());
+
+            // Retrieve existing entries from localStorage
+            let entries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
+
+            // Add the new entry
+            entries.push(formEntries);
+
+            // Save updated entries back to localStorage
+            localStorage.setItem('diaryEntries', JSON.stringify(entries));
+
+            // Reload the page to show the updated list
+            location.reload();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve and parse the diary entries from localStorage
+            const entries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
+
+            // Find the container where entries will be displayed
+            const entriesContainer = document.querySelector('#previous-entries');
+
+            // Display each entry
+            entries.forEach(entry => {
+                const entryDiv = document.createElement('div');
+                entryDiv.classList.add('diary-entry');
+                entryDiv.innerHTML = `
+                    <h3>${entry['date-time']}</h3>
+                    <p><strong>Mood Rating:</strong> ${entry['mood-rating']}</p>
+                    <p><strong>Stress Level:</strong> ${entry['stress-level']}</p>
+                    <p><strong>Description:</strong> ${entry['mood-description']}</p>
+                    <p><strong>Triggers or Events:</strong> ${entry['triggers-events'] || 'N/A'}</p>
+                    <p><strong>Physical Sensations:</strong> ${entry['physical-sensations'] || 'N/A'}</p>
+                    <p><strong>Thoughts:</strong> ${entry['thoughts'] || 'N/A'}</p>
+                    <p><strong>Behavioral Responses:</strong> ${entry['behavioral-responses'] || 'N/A'}</p>
+                    <p><strong>Activities and Lifestyle Factors:</strong> ${entry['activities-lifestyle'] || 'N/A'}</p<p><strong>Self-Care Actions:</strong> ${entry['self-care-actions'] || 'N/A'}</p>
+                    <p><strong>Notes for Reflection:</strong> ${entry['notes-reflection'] || 'N/A'}</p>
+                `;
+                entriesContainer.appendChild(entryDiv);
+            });
+        });
+    </script>
+</body>
+</html>
