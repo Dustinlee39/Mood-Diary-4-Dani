@@ -1,464 +1,303 @@
-l<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mood Diary</title>
+    <title>Sorting Algorithm Visualizer</title>
     <style>
-        /* Enhanced CSS styles */
+        /* Embedded CSS */
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
             color: #333;
-        }
-
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 15px 0;
-            text-align: center;
-            font-size: 24px;
-        }
-
-        main {
+            margin: 0;
             padding: 20px;
-            max-width: 900px;
-            margin: auto;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        button {
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        button:hover {
-            transform: scale(1.05);
-        }
-
-        .profile-button {
-            background-color: #007bff;
-        }
-
-        .profile-button:hover {
-            background-color: #0056b3;
-        }
-
-        .feedback-button {
-            background-color: #28a745;
-        }
-
-        .feedback-button:hover {
-            background-color: #218838;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.3s;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        .modal-content {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-            animation: fadeIn 0.3s;
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            font-size: 24px;
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #2c3e50;
         }
 
-        .modal-content input, .modal-content textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
+        .instructions, .usage, .purpose {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f4f7;
+            border: 1px solid #3498db;
             border-radius: 5px;
         }
 
-        .modal-content button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .modal-content button:hover {
-            background-color: #0056b3;
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+        .instructions p, .usage p, .purpose p {
+            line-height: 1.5;
         }
 
         textarea {
-            width: calc(100% - 22px);
-            height: 150px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        select {
-            width: calc(100% - 22px);
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .form-group {
+            width: 100%;
+            height: 100px;
+            padding: 15px;
             margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
-        .form-group label {
-            display: block;
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .examples {
+            margin-top: 20px;
+        }
+
+        .example {
+            padding: 10px;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .error {
+            color: #e74c3c;
             font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .entry-container {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            border: 1px solid #ced4da;
-        }
-
-        .entry-container h3 {
-            margin-top: 0;
-        }
-
-        .entry-container .entry-text {
-            white-space: pre-wrap;
-            margin-bottom: 10px;
-        }
-
-        .entry-container .entry-mood {
-            font-style: italic;
-            color: #6c757d;
-        }
-
-        .entry-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .entry-list li {
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .entry-list li:last-child {
-            border-bottom: none;
-        }
-
-        .history {
-            margin-top: 40px;
-        }
-
-        .history h2 {
-            margin-bottom: 20px;
-        }
-
-        .affirmation {
-            font-style: italic;
-            color: #2e8b57;
-            margin-top: 10px;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Mood Diary</h1>
-    </header>
-
-    <main>
-        <button class="profile-button" onclick="openProfile()">Manage Profile</button>
-        <button class="feedback-button" onclick="openFeedback()">Leave Feedback</button>
-
-        <h2>New Diary Entry</h2>
-        <div class="form-group">
-            <label for="diaryEntry">Your Entry:</label>
-            <textarea id="diaryEntry" placeholder="What's on your mind?" oninput="livePreview()"></textarea>
+    <div class="container">
+        <h1>Sorting Algorithm Visualizer</h1>
+        <div class="instructions">Enter numbers separated by commas (e.g., 1, 2, 3)</div>
+        <textarea id="inputNumbers"></textarea>
+        <button id="sortButton">Sort</button>
+        <div class="usage">
+            <h2>How to Use</h2>
+            <p>Welcome to the Sorting Algorithm Visualizer! ...</p>
         </div>
-
-        <div class="form-group">
-            <label for="mood">Your Mood:</label>
-            <select id="mood" onchange="displayAffirmation()">
-                <option value="">Select Mood</option>
-                <option value="Happy">Happy</option>
-                <option value="Sad">Sad</option>
-                <option value="Angry">Angry</option>
-                <option value="Excited">Excited</option>
-                <option value="Anxious">Anxious</option>
-                <option value="Calm">Calm</option>
-                <option value="Tired">Tired</option>
-                <option value="Motivated">Motivated</option>
-                <option value="Stressed">Stressed</option>
-            </select>
+        <div class="purpose">
+            <h2>What It’s Used For</h2>
+            <p>The Sorting Algorithm Visualizer is a powerful educational tool...</p>
         </div>
-
-        <button onclick="saveEntry()">Save Entry</button>
-        <button onclick="clearEntries()">Clear All Entries</button>
-
-        <div class="form-group">
-            <div id="affirmationContainer" class="affirmation"></div>
+        <h2>Examples</h2>
+        <div class="examples">
+            <div class="example">
+                <strong>Input:</strong> <span>[64, 34, 25, 12, 22, 11, 90]</span><br>
+                <strong>Sorted Output:</strong> <span class="output"></span>
+            </div>
+            <div class="example">
+                <strong>Input:</strong> <span>[5, 2, 9, 1, 5, 6]</span><br>
+                <strong>Sorted Output:</strong> <span class="output"></span>
+            </div>
+            <div class="example">
+                <strong>Input:</strong> <span>[3, 0, 2, 5, -1, 4, 1]</span><br>
+                <strong>Sorted Output:</strong> <span class="output"></span>
+            </div>
         </div>
-
-        <div class="entry-container" id="entryPreview" style="display: none;">
-            <h3>Entry Preview</h3>
-            <div class="entry-text" id="entryText"></div>
-            <div class="entry-mood" id="entryMood"></div>
-        </div>
-
-        <div class="history">
-            <h2>Past Entries</
-            </h2>
-            <ul class="entry-list" id="entryList">
-                <!-- Entries will be dynamically added here -->
-            </ul>
-        </div>
-    </main>
-
-    <!-- Profile Modal -->
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeProfile()">&times;</span>
-            <h2>Manage Profile</h2>
-            <label for="profileName">Name:</label>
-            <input type="text" id="profileName" placeholder="Enter your name">
-            <label for="profileBio">Bio:</label>
-            <textarea id="profileBio" placeholder="Tell us about yourself"></textarea>
-            <button onclick="saveProfile()">Save Profile</button>
-        </div>
+        <div class="error" id="errorMessage"></div>
     </div>
 
-    <!-- Feedback Modal -->
-    <div id="feedbackModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeFeedback()">&times;</span>
-            <h2>Leave Feedback</h2>
-            <label for="feedbackText">Your Feedback:</label>
-            <textarea id="feedbackText" placeholder="We value your feedback"></textarea>
-            <button onclick="submitFeedback()">Submit Feedback</button>
-        </div>
-    </div>
-
-    <!-- JavaScript Code -->
     <script>
-        // Open and close modal functions
-        function openProfile() {
-            document.getElementById('profileModal').style.display = 'flex';
+        // Embedded JavaScript
+        function swap(arr, i, j) {
+            [arr[i], arr[j]] = [arr[j], arr[i]];
         }
 
-        function closeProfile() {
-            document.getElementById('profileModal').style.display = 'none';
+        function binaryInsert(arr, key, left, right) {
+            while (left <= right) {
+                const mid = Math.floor((left + right) / 2);
+                if (key < arr[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            }
+            return left;
         }
 
-        function openFeedback() {
-            document.getElementById('feedbackModal').style.display = 'flex';
+        function insertionSort(arr, left, right) {
+            for (let i = left + 1; i <= right; i++) {
+                const key = arr[i];
+                const position = binaryInsert(arr, key, left, i - 1);
+                for (let j = i; j > position; j--) {
+                    arr[j] = arr[j - 1];
+                }
+                arr[position] = key;
+            }
         }
 
-        function closeFeedback() {
-            document.getElementById('feedbackModal').style.display = 'none';
+        function mergeInPlace(arr, left, mid, right) {
+            let start1 = left, start2 = mid + 1;
+            if (arr[mid] <= arr[start2]) return;
+            while (start1 <= mid && start2 <= right) {
+                if (arr[start1] <= arr[start2]) {
+                    start1++;
+                } else {
+                    const value = arr[start2];
+                    let index = start2;
+                    while (index > start1) {
+                        arr[index] = arr[index - 1];
+                        index--;
+                    }
+                    arr[start1] = value;
+                    start1++;
+                    mid++;
+                    start2++;
+                }
+            }
         }
 
-        // Save profile data
-        function saveProfile() {
-            const name = document.getElementById('profileName').value;
-            const bio = document.getElementById('profileBio').value;
-            localStorage.setItem('profileName', name);
-            localStorage.setItem('profileBio', bio);
-            alert('Profile saved successfully!');
-            closeProfile();
+        function mergeSort(arr, left, right) {
+            if (left < right) {
+                const mid = Math.floor((left + right) / 2);
+                mergeSort(arr, left, mid);
+                mergeSort(arr, mid + 1, right);
+                mergeInPlace(arr, left, mid, right);
+            }
         }
 
-        // Live preview for diary entry
-        function livePreview() {
-            const entryText = document.getElementById('diaryEntry').value;
-            const mood = document.getElementById('mood').value;
-            const entryTextElement = document.getElementById('entryText');
-            const entryMoodElement = document.getElementById('entryMood');
+        function analyzeData(arr) {
+            let isSorted = true;
+            let min = arr[0], max = arr[0];
+            let runs = 0, maxRunLength = 1;
+            let totalElements = arr.length;
 
-            entryTextElement.textContent = entryText;
-            entryMoodElement.textContent = mood ? `Mood: ${mood}` : '';
-
-            document.getElementById('entryPreview').style.display = entryText ? 'block' : 'none';
-        }
-
-        // Display affirmation based on mood
-        function displayAffirmation() {
-            const mood = document.getElementById('mood').value;
-            const affirmationContainer = document.getElementById('affirmationContainer');
-
-            let affirmation = '';
-            switch (mood) {
-                case 'Happy':
-                    affirmation = 'Keep spreading joy!';
-                    break;
-                case 'Sad':
-                    affirmation = 'It\'s okay to feel sad. This too shall pass.';
-                    break;
-                case 'Angry':
-                    affirmation = 'Take a deep breath. You\'ve got this.';
-                    break;
-                case 'Excited':
-                    affirmation = 'Let your excitement fuel your day!';
-                    break;
-                case 'Anxious':
-                    affirmation = 'You are stronger than your anxiety.';
-                    break;
-                case 'Calm':
-                    affirmation = 'Embrace the peace within you.';
-                    break;
-                case 'Tired':
-                    affirmation = 'Rest up. You deserve it.';
-                    break;
-                case 'Motivated':
-                    affirmation = 'Keep pushing forward!';
-                    break;
-                case 'Stressed':
-                    affirmation = 'Take it one step at a time.';
-                    break;
-                default:
-                    affirmation = '';
+            for (let i = 1; i < totalElements; i++) {
+                if (arr[i] < arr[i - 1]) isSorted = false;
+                if (arr[i] < arr[i - 1]) {
+                    runs++;
+                    maxRunLength = Math.max(maxRunLength, runs);
+                } else {
+                    runs = 0;
+                }
+                min = Math.min(min, arr[i]);
+                max = Math.max(max, arr[i]);
             }
 
-            affirmationContainer.textContent = affirmation;
+            const range = max - min;
+            return { isSorted, min, max, maxRunLength, range, totalElements };
         }
 
-        // Save diary entry to localStorage
-        function saveEntry() {
-            const entryText = document.getElementById('diaryEntry').value;
-            const mood = document.getElementById('mood').value;
+        function predictStrategy(analysis, historicalData) {
+            if (analysis.isSorted) return 'insertion';
+            if (analysis.maxRunLength > 5) return 'insertion';
+            if (analysis.range < 10) return 'merge';
+            const averageTime = historicalData[analysis.totalElements] || 0;
+            if (averageTime < 50) return 'quick';
+            return 'bubble';
+        }
 
-            if (!entryText) {
-                alert('Please enter some text for your diary entry.');
+        function adaptiveBidirectionalBubbleSort(arr, historicalData) {
+            const n = arr.length;
+            if (n <= 1) return arr;
+
+            let start = 0, end = n - 1;
+            const insertionThreshold = Math.max(10, Math.floor(n / 20));
+            const mergeSortThreshold = 50;
+
+            const analysis = analyzeData(arr);
+            const strategy = predictStrategy(analysis, historicalData);
+            if (analysis.isSorted) return arr;
+
+            while (start < end) {
+                let swapped = false;
+                let lastSwappedIndex = end;
+
+                if (strategy === 'insertion') {
+                    insertionSort(arr, start, end);
+                    break;
+                } else if (strategy === 'merge') {
+                    mergeSort(arr, start, end);
+                    break;
+                }
+
+                for (let j = start; j < lastSwappedIndex; j++) {
+                    if (arr[j] > arr[j + 1]) {
+                        swap(arr, j, j + 1);
+                        swapped = true;
+                        lastSwappedIndex = j;
+                    }
+                }
+                end = lastSwappedIndex;
+
+                for (let j = end; j > start; j--) {
+                    if (arr[j] < arr[j - 1]) {
+                        swap(arr, j, j - 1);
+                        swapped = true;
+                    }
+                }
+                start++;
+
+                if (!swapped) break;
+
+                const currentLength = end - start;
+
+                if (currentLength < insertionThreshold) {
+                    insertionSort(arr, start, end);
+                    break;
+                } else if (currentLength > mergeSortThreshold) {
+                    mergeSort(arr, start, end);
+                    break;
+                }
+            }
+
+            historicalData[n] = (historicalData[n] || 0) + (n * 10);
+            return arr;
+        }
+
+        function displaySortedArray() {
+            const input = document.getElementById('inputNumbers').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const outputs = document.querySelectorAll('.output');
+
+            // Clear previous error messages and outputs
+            errorMessage.textContent = '';
+            outputs.forEach(output => output.textContent = '');
+
+            // Parse the input
+            const arr = input.split(',').map(num => parseFloat(num.trim())).filter(num => !isNaN(num));
+
+            if (arr.length === 0) {
+                errorMessage.textContent = 'Please enter valid numbers separated by commas.';
                 return;
             }
 
-            const entries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
-            entries.push({ text: entryText, mood: mood });
-            localStorage.setItem('diaryEntries', JSON.stringify(entries));
+            const historicalData = {}; // Initialize historical data for performance tracking
+            const sortedArray = adaptiveBidirectionalBubbleSort(arr, historicalData);
 
-            alert('Entry saved successfully!');
-            displayEntries();
-            clearForm();
-        }
-
-        // Display all diary entries
-        function displayEntries() {
-            const entries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
-            const entryList = document.getElementById('entryList');
-            entryList.innerHTML = '';
-
-            entries.forEach((entry, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <div>
-                        <div class="entry-text">${entry.text}</div>
-                        <div class="entry-mood">Mood: ${entry.mood}</div>
-                    </div>
-                    <button onclick="deleteEntry(${index})">Delete</button>
-                `;
-                entryList.appendChild(li);
+            // Display the sorted output
+            outputs.forEach((output, index) => {
+                if (index < arr.length) {
+                    output.textContent = sortedArray[index];
+                }
             });
         }
 
-        // Clear form after saving an entry
-        function clearForm() {
-            document.getElementById('diaryEntry').value = '';
-            document.getElementById('mood').value = '';
-            livePreview();
-        }
-
-        // Delete a specific entry
-        function deleteEntry(index) {
-            const entries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
-            entries.splice(index, 1);
-            localStorage.setItem('diaryEntries', JSON.stringify(entries));
-            displayEntries();
-        }
-
-        // Clear all diary entries
-        function clearEntries() {
-            if (confirm('Are you sure you want to delete all entries?')) {
-                localStorage.removeItem('diaryEntries');
-                displayEntries();
-            }
-        }
-
-        // Submit feedback
-        function submitFeedback() {
-            const feedback = document.getElementById('feedbackText').value;
-            if (!feedback) {
-                alert('Please enter your feedback.');
-                return;
-            }
-
-            // You can add code here to send feedback to the server
-            alert('Thank you for your feedback!');
-            document.getElementById('feedbackText').value = '';
-            closeFeedback();
-        }
-
-        // Load saved profile and entries on page load
-        window.onload = function() {
-            const profileName = localStorage.getItem('profileName');
-            const profileBio = localStorage.getItem('profileBio');
-            if (profileName) {
-                document.getElementById('profileName').value = profileName;
-            }
-            if (profileBio) {
-                document.getElementById('profileBio').value = profileBio;
-            }
-
-            displayEntries();
-        };
+        document.getElementById('sortButton').addEventListener('click', displaySortedArray);
     </script>
 </body>
 </html>
