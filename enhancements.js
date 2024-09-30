@@ -1,85 +1,79 @@
+### Full Upgraded `enhancements.js`
+
+```javascript
 // enhancements.js
 
-// Mood categories for better organization
-const moodCategories = {
-    happy: "Positive",
-    sad: "Negative",
-    anxious: "Negative",
-    angry: "Negative",
-    relaxed: "Positive",
-    excited: "Positive",
-    overwhelmed: "Negative",
+// Enhanced mood tracking with emojis
+const moodEmojis = {
+    happy: "😊",
+    sad: "😢",
+    neutral: "😐",
+    angry: "😠",
+    excited: "😃",
+    anxious: "😰",
+    bored: "😒"
 };
 
-// Function to categorize moods and display feedback
-function categorizeMood(mood) {
-    return moodCategories[mood] || "Neutral";
+// Function to track moods with emojis
+function enhancedMoodTracking() {
+    const moodButton = document.getElementById('track-mood');
+    const moodDisplay = document.getElementById('mood-display');
+
+    if (moodButton) {
+        moodButton.addEventListener('click', () => {
+            const mood = prompt("How are you feeling today? (happy, sad, neutral, angry, excited, anxious, bored)");
+            if (mood in moodEmojis) {
+                const moodRecord = document.createElement('p');
+                moodRecord.innerText = `You felt ${moodEmojis[mood]} (${mood}) on ${new Date().toLocaleDateString()}.`;
+                moodDisplay.appendChild(moodRecord);
+            } else {
+                alert("Please enter a valid mood.");
+            }
+        });
+    }
 }
 
-// Enhanced mood logging with categorization
-document.getElementById('logMoodButton').addEventListener('click', function() {
-    const mood = document.getElementById('moodInput').value;
-    const tags = document.getElementById('moodTags').value.split(',').map(tag => tag.trim());
-    const category = categorizeMood(mood);
-    const entry = { mood, tags, category, date: new Date().toISOString() };
-    moodHistory.push(entry);
-    updateMoodHistoryDisplay();
-    document.getElementById('moodTags').value = ''; // Clear input
-});
-
-// Function to create a mood visualization chart
-function createMoodChart() {
-    const moodCounts = {};
-    moodHistory.forEach(entry => {
-        moodCounts[entry.mood] = (moodCounts[entry.mood] || 0) + 1;
+// Function to handle task completion
+function handleTaskCompletion() {
+    const taskDisplay = document.getElementById('task-display');
+    taskDisplay.addEventListener('click', (e) => {
+        if (e.target.tagName === 'LI') {
+            e.target.style.textDecoration = 'line-through';
+            e.target.style.color = 'gray';
+        }
     });
+}
 
-    // Create a simple chart using Canvas
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = 400;
-    canvas.height = 200;
-    document.body.appendChild(canvas);
+// Enhanced reminder feature with timestamp
+function enhancedReminderFeature() {
+    const reminderButton = document.getElementById('add-reminder');
+    if (reminderButton) {
+        reminderButton.addEventListener('click', () => {
+            const reminderText = prompt("Enter your reminder:");
+            const reminderTime = prompt("Set reminder time (e.g., 2024-10-01T10:30):");
+            if (reminderText && reminderTime) {
+                const reminderDate = new Date(reminderTime);
+                const currentTime = new Date();
+                const timeDiff = reminderDate - currentTime;
 
-    const colors = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"];
-    let i = 0;
-    const total = moodHistory.length;
-
-    for (const mood in moodCounts) {
-        const count = moodCounts[mood];
-        const percentage = (count / total) * 100;
-        ctx.fillStyle = colors[i % colors.length];
-        ctx.fillRect(i * (canvas.width / Object.keys(moodCounts).length), canvas.height - percentage * (canvas.height / 100), (canvas.width / Object.keys(moodCounts).length), percentage * (canvas.height / 100));
-        i++;
+                if (timeDiff > 0) {
+                    setTimeout(() => {
+                        alert(`Reminder: ${reminderText}`);
+                    }, timeDiff);
+                } else {
+                    alert("Please set a future reminder.");
+                }
+            }
+        });
     }
 }
 
-// Function to show chart upon clicking a button
-document.getElementById('showChartButton').addEventListener('click', function() {
-    createMoodChart();
-});
+// Initialize enhancements
+function initializeEnhancements() {
+    enhancedMoodTracking();
+    handleTaskCompletion();
+    enhancedReminderFeature();
+}
 
-// Adding user settings feature
-let userSettings = {
-    theme: "light",
-};
-
-document.getElementById('settingsButton').addEventListener('click', function() {
-    const theme = prompt("Enter your preferred theme (light/dark):", userSettings.theme);
-    if (theme === "dark") {
-        document.body.style.backgroundColor = "#333";
-        document.body.style.color = "#fff";
-        userSettings.theme = "dark";
-    } else {
-        document.body.style.backgroundColor = "#fff";
-        document.body.style.color = "#000";
-        userSettings.theme = "light";
-    }
-});
-
-// Function to reset mood history
-document.getElementById('resetMoodButton').addEventListener('click', function() {
-    moodHistory = [];
-    updateMoodHistoryDisplay();
-    alert('Mood history reset!');
-});
+// Call the initialization function
+document.addEventListener('DOMContentLoaded', initializeEnhancements);
