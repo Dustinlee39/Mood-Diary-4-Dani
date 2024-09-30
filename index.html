@@ -4,22 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mood Diary</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Your existing CSS file -->
 </head>
 <body>
     <h1>Mood Diary</h1>
-    <input type="text" id="moodInput" placeholder="Enter your mood (1-10)">
-    <input type="text" id="moodTags" placeholder="Enter tags (comma-separated)">
-    <button id="logMoodButton">Log Mood</button>
     
-    <h2>Mood History</h2>
-    <div id="moodHistoryContainer"></div>
-    
-    <div id="averageMoodContainer"></div>
-    
-    <input type="text" id="filterTagInput" placeholder="Filter by tag">
-    <button id="filterMoodButton">Filter Mood</button>
-    
-    <script src="script.js"></script>
-    <script src="moodEnhancements.js"></script> <!-- Include new JS file -->
+    <div>
+        <label for="moodInput">How do you feel today?</label>
+        <input type="text" id="moodInput" placeholder="Enter your mood">
+        
+        <label for="moodTags">Tags (comma-separated):</label>
+        <input type="text" id="moodTags" placeholder="e.g., happy, tired">
+        
+        <button id="logMoodButton">Log Mood</button>
+    </div>
+
+    <div id="moodHistoryContainer">
+        <h2>Mood History</h2>
+        <ul id="moodHistoryList"></ul>
+    </div>
+
+    <!-- New buttons for additional functionalities -->
+    <button id="showChartButton">Show Mood Chart</button>
+    <button id="settingsButton">User Settings</button>
+    <button id="resetMoodButton">Reset Mood History</button>
+
+    <script src="moodDiary.js"></script> <!-- Your existing JavaScript file -->
+    <script src="enhancements.js"></script> <!-- Include the new enhancements file -->
 </body>
 </html>
