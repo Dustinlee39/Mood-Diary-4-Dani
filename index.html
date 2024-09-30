@@ -3,217 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Whimsical Monster Animation</title>
-    <style>
-        canvas {
-            background: linear-gradient(to bottom, lightblue, deepskyblue);
-            border: 5px solid darkblue;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
-            display: block;
-            margin: auto;
-        }
-    </style>
+    <title>Mood Diary</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <canvas id="monsterCanvas" width="800" height="600"></canvas>
-
-    <script>
-        const canvas = document.getElementById('monsterCanvas');
-        const ctx = canvas.getContext('2d');
-
-        const monster = {
-            x: canvas.width / 2,
-            y: canvas.height / 2,
-            radius: 100,
-            armAngle: 0,
-            legBob: 0,
-            eyeMovement: 0,
-            blink: false,
-            blinkTimer: 0,
-            mouthTimer: 0,
-            smileWide: true,
-        };
-
-        function drawBody() {
-            ctx.beginPath();
-            ctx.arc(monster.x, monster.y, monster.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'green';
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        function drawEars() {
-            ctx.fillStyle = 'green';
-            ctx.beginPath();
-            ctx.moveTo(monster.x - 40, monster.y - 70); // Left ear
-            ctx.lineTo(monster.x - 80, monster.y - 40);
-            ctx.lineTo(monster.x - 20, monster.y - 40);
-            ctx.fill();
-            ctx.closePath();
-
-            ctx.beginPath();
-            ctx.moveTo(monster.x + 40, monster.y - 70); // Right ear
-            ctx.lineTo(monster.x + 80, monster.y - 40);
-            ctx.lineTo(monster.x + 20, monster.y - 40);
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        function drawFace() {
-            let eyeOffset = Math.sin(monster.eyeMovement) * 10;
-            ctx.fillStyle = 'white';
-            ctx.beginPath();
-            ctx.arc(monster.x - 40 + eyeOffset, monster.y - 30, 20, 0, Math.PI * 2); // Left eye
-            ctx.fill();
-            ctx.closePath();
-            ctx.beginPath();
-            ctx.arc(monster.x + 40 + eyeOffset, monster.y - 30, 20, 0, Math.PI * 2); // Right eye
-            ctx.fill();
-            ctx.closePath();
-
-            ctx.fillStyle = 'black';
-            ctx.beginPath();
-            ctx.arc(monster.x - 40 + eyeOffset, monster.y - 30, 10, 0, Math.PI * 2); // Left pupil
-            ctx.fill();
-            ctx.closePath();
-            ctx.beginPath();
-            ctx.arc(monster.x + 40 + eyeOffset, monster.y - 30, 10, 0, Math.PI * 2); // Right pupil
-            ctx.fill();
-            ctx.closePath();
-
-            if (monster.blink) {
-                ctx.fillStyle = 'green';
-                ctx.fillRect(monster.x - 60, monster.y - 50, 40, 40); // Left eyelid
-                ctx.fillRect(monster.x + 20, monster.y - 50, 40, 40); // Right eyelid
-            }
-
-            ctx.fillStyle = 'green';
-            ctx.beginPath();
-            ctx.moveTo(monster.x, monster.y - 10);
-            ctx.lineTo(monster.x - 10, monster.y + 20);
-            ctx.lineTo(monster.x + 10, monster.y + 20);
-            ctx.fill();
-            ctx.closePath();
-
-            ctx.beginPath();
-            ctx.arc(monster.x, monster.y + 40, monster.smileWide ? 50 : 30, 0, Math.PI);
-            ctx.strokeStyle = 'black';
-            ctx.lineWidth = 5;
-            ctx.stroke();
-            ctx.closePath();
-        }
-
-        function drawArms() {
-            let armSwing = Math.sin(monster.armAngle) * 20;
-
-            ctx.strokeStyle = 'green';
-            ctx.lineWidth = 15;
-
-            // Left arm
-            ctx.beginPath();
-            ctx.moveTo(monster.x - 100, monster.y);
-            ctx.lineTo(monster.x - 150, monster.y + armSwing);
-            ctx.lineTo(monster.x - 130, monster.y + armSwing + 20);
-            ctx.lineTo(monster.x - 150, monster.y + armSwing);
-            ctx.lineTo(monster.x - 170, monster.y + armSwing + 20);
-            ctx.stroke();
-            ctx.closePath();
-
-            // Right arm
-            ctx.beginPath();
-            ctx.moveTo(monster.x + 100, monster.y);
-            ctx.lineTo(monster.x + 150, monster.y + armSwing);
-            ctx.lineTo(monster.x + 130, monster.y + armSwing + 20);
-            ctx.lineTo(monster.x + 150, monster.y + armSwing);
-            ctx.lineTo(monster.x + 170, monster.y + armSwing + 20);
-            ctx.stroke();
-            ctx.closePath();
-        }
-
-        function drawLegs() {
-            let legBob = Math.sin(monster.legBob) * 10;
-
-            ctx.strokeStyle = 'green';
-            ctx.lineWidth = 20;
-
-            // Left leg
-            ctx.beginPath();
-            ctx.moveTo(monster.x - 50, monster.y + 100);
-            ctx.lineTo(monster.x - 50, monster.y + 150 + legBob);
-            ctx.lineTo(monster.x - 60, monster.y + 150 + legBob); // Toes
-            ctx.lineTo(monster.x - 40, monster.y + 150 + legBob);
-            ctx.lineTo(monster.x - 50, monster.y + 130); // Kneecap
-            ctx.stroke();
-            ctx.closePath();
-
-            // Right leg
-            ctx.beginPath();
-            ctx.moveTo(monster.x + 50, monster.y + 100);
-            ctx.lineTo(monster.x + 50, monster.y + 150 + legBob);
-            ctx.lineTo(monster.x + 60, monster.y + 150 + legBob); // Toes
-            ctx.lineTo(monster.x + 40, monster.y + 150 + legBob);
-            ctx.lineTo(monster.x + 50, monster.y + 130); // Kneecap
-            ctx.stroke();
-            ctx.closePath();
-        }
-
-        function drawHands() {
-            ctx.fillStyle = 'green';
-
-            // Left hand
-            ctx.beginPath();
-            ctx.moveTo(monster.x - 130, monster.y + 20);
-            ctx.lineTo(monster.x - 150, monster.y + 40);
-            ctx.lineTo(monster.x - 140, monster.y + 30);
-            ctx.lineTo(monster.x - 130, monster.y + 40);
-            ctx.lineTo(monster.x - 120, monster.y + 30);
-            ctx.lineTo(monster.x - 130, monster.y + 20);
-            ctx.fill();
-            ctx.closePath();
-
-            // Right hand
-            ctx.beginPath();
-            ctx.moveTo(monster.x + 130, monster.y + 20);
-            ctx.lineTo(monster.x + 150, monster.y + 40);
-            ctx.lineTo(monster.x + 140, monster.y + 30);
-            ctx.lineTo(monster.x + 130, monster.y + 40);
-            ctx.lineTo(monster.x + 120, monster.y + 30);
-            ctx.lineTo(monster.x + 130, monster.y + 20);
-            ctx.fill();
-            ctx.closePath();
-        }
-
-        function updateMonster() {
-            monster.armAngle += 0.05;
-            monster.legBob += 0.05;
-            monster.eyeMovement += 0.03;
-
-            monster.blinkTimer++;
-            if (monster.blinkTimer > 200) {
-                monster.blink = !monster.blink;
-                monster.blinkTimer = 0;
-            }
-
-            monster.mouthTimer++;
-            if (monster.mouthTimer > 300) {
-                monster.smileWide = !monster.smileWide;
-                monster.mouthTimer = 0;
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawBody();
-            drawEars();
-            drawFace();
-            drawArms();
-            drawHands();
-            drawLegs();
-            updateMonster();
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-    </script>
+    <h1>Mood Diary</h1>
+    <div>
+        <label for="moodInput">How do you feel today?</label>
+        <select id="moodInput">
+            <option value="happy">Happy</option>
+            <option value="sad">Sad</option>
+            <option value="anxious">Anxious</option>
+            <option value="angry">Angry</option>
+        </select>
+        <input type="text" id="moodTags" placeholder="Add tags (comma separated)" />
+        <button id="logMoodButton">Log Mood</button>
+    </div>
+    <div id="dailyPrompt">How did you feel today? What made you feel that way?</div>
+    <textarea id="dailyReflection" placeholder="Write your reflection here..."></textarea>
+    <button id="saveReflectionButton">Save Reflection</button>
+    <div id="moodHistoryContainer"></div>
+    <form id="feedbackForm">
+        <textarea id="feedback" placeholder="Your feedback here..." required></textarea>
+        <button type="submit">Submit Feedback</button>
+    </form>
+    <input type="file" id="fileInput" accept=".json" />
+    <button id="exportButton">Export Mood History</button>
+    <script src="script.js"></script>
 </body>
 </html>
