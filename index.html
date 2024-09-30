@@ -4,54 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mood Diary</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Your existing CSS file -->
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <script src="script.js" defer></script> <!-- Your JavaScript file if applicable -->
 </head>
 <body>
-    <h1>Mood Diary</h1>
-    
-    <div class="input-container">
-        <label for="moodInput">How do you feel today?</label>
-        <input type="text" id="moodInput" placeholder="Enter your mood">
-        
-        <label for="moodTags">Tags (comma-separated):</label>
-        <input type="text" id="moodTags" placeholder="e.g., happy, tired">
-        
-        <button id="logMoodButton" class="styled-button">Log Mood</button>
-    </div>
+    <header>
+        <h1>Mood Diary</h1>
+    </header>
 
-    <div id="moodHistoryContainer">
-        <h2>Mood History</h2>
-        <ul id="moodHistoryList"></ul>
-    </div>
+    <main>
+        <section class="input-container">
+            <label for="moodInput">How do you feel today?</label>
+            <input type="text" id="moodInput" placeholder="Enter your mood..." />
+            <button class="styled-button" id="addMoodButton">Add Mood</button>
+        </section>
 
-    <div id="chartContainer" class="chart-section" style="display: none;">
-        <h2>Mood Chart</h2>
-        <canvas id="moodChart"></canvas>
-    </div>
+        <section>
+            <h2>Mood History</h2>
+            <ul id="moodHistoryList"></ul>
+        </section>
 
-    <button id="showChartButton" class="styled-button">Show Mood Chart</button>
-    <button id="settingsButton" class="styled-button">User Settings</button>
-    <button id="resetMoodButton" class="styled-button">Reset Mood History</button>
+        <section class="chart-section">
+            <h2>Mood Trend Chart</h2>
+            <div id="chartContainer"></div> <!-- Container for the chart -->
+        </section>
 
-    <!-- Settings Modal -->
-    <div id="settingsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2>User Settings</h2>
-            <label for="themeSelect">Select Theme:</label>
-            <select id="themeSelect">
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-            </select>
-            <br><br>
-            <label for="notificationToggle">Enable Notifications:</label>
-            <input type="checkbox" id="notificationToggle" checked>
-            <br><br>
-            <button id="saveSettingsButton" class="styled-button">Save Settings</button>
+        <!-- Modal for adding additional mood details -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Add More Details</h2>
+                <textarea id="moodDetails" placeholder="Enter more details about your mood..."></textarea>
+                <button class="styled-button" id="saveDetailsButton">Save Details</button>
+            </div>
         </div>
-    </div>
+    </main>
 
-    <script src="moodDiary.js"></script> <!-- Your existing JavaScript file -->
-    <script src="enhancements.js"></script> <!-- Include the new enhancements file -->
+    <footer>
+        <p>© 2024 Mood Diary. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript to handle mood input and modal interactions
+        document.getElementById('addMoodButton').addEventListener('click', function() {
+            const moodInput = document.getElementById('moodInput').value;
+            const moodHistoryList = document.getElementById('moodHistoryList');
+            const listItem = document.createElement('li');
+            listItem.textContent = moodInput;
+
+            // Add click event to open modal for additional details
+            listItem.addEventListener('click', function() {
+                document.getElementById('myModal').style.display = 'block';
+                document.getElementById('moodDetails').value = ''; // Clear previous details
+            });
+
+            moodHistoryList.appendChild(listItem);
+            document.getElementById('moodInput').value = ''; // Clear input
+        });
+
+        // Close modal functionality
+        document.querySelector('.close-button').addEventListener('click', function() {
+            document.getElementById('myModal').style.display = 'none';
+        });
+
+        document.getElementById('saveDetailsButton').addEventListener('click', function() {
+            const moodDetails = document.getElementById('moodDetails').value;
+            alert('Details Saved: ' + moodDetails); // Replace with actual saving logic
+            document.getElementById('myModal').style.display = 'none'; // Close modal
+        });
+    </script>
 </body>
 </html>
