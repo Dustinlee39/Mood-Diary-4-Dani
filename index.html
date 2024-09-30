@@ -5,38 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mood Diary</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="enhancements.js" defer></script>
 </head>
 <body>
     <header>
         <h1>Mood Diary</h1>
-        <p>Track your mood, manage your tasks, and set reminders!</p>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#entries">Entries</a></li>
+                <li><a href="#analytics">Analytics</a></li>
+                <li><a href="#settings">Settings</a></li>
+            </ul>
+        </nav>
     </header>
+
     <main>
-        <section id="mood-section">
-            <h2>Track Your Mood</h2>
-            <button id="track-mood">Track Mood</button>
-            <div id="mood-display" style="margin: 20px;"></div>
+        <section id="home">
+            <h2>Welcome to Your Mood Diary</h2>
+            <button onclick="showMoodEntryForm()">Log Mood</button>
         </section>
 
-        <section id="task-section">
-            <h2>Task List</h2>
-            <button id="add-task">Add Task</button>
-            <ul id="task-display" style="margin: 20px;"></ul>
+        <section id="entries">
+            <h2>Your Mood Entries</h2>
+            <div id="entryList"></div>
+            <button onclick="fetchMoodEntries()">View Past Entries</button>
         </section>
 
-        <section id="quote-section">
-            <h2>Motivational Quote</h2>
-            <div id="quote-display" style="font-style: italic; margin: 20px;"></div>
+        <section id="analytics">
+            <h2>Mood Analytics</h2>
+            <canvas id="moodTrendChart" width="400" height="200"></canvas>
+            <button onclick="renderMoodTrends(moodData)">Show Trends</button>
         </section>
 
-        <section id="reminder-section">
-            <h2>Set a Reminder</h2>
-            <button id="add-reminder">Add Reminder</button>
+        <section id="settings">
+            <h2>User Settings</h2>
+            <!-- User preference settings here -->
         </section>
     </main>
 
-    <script src="enhancements.js"></script>
-    <script src="moodEnhancements.js"></script>
-    <script src="script.js"></script>
+    <footer>
+        <p>&copy; 2024 Mood Diary Application</p>
+    </footer>
 </body>
 </html>
