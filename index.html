@@ -4,74 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mood Diary</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
-    <script src="script.js" defer></script> <!-- Your JavaScript file if applicable -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <h1>Mood Diary</h1>
+        <p>Track your mood, manage your tasks, and set reminders!</p>
     </header>
-
     <main>
-        <section class="input-container">
-            <label for="moodInput">How do you feel today?</label>
-            <input type="text" id="moodInput" placeholder="Enter your mood..." />
-            <button class="styled-button" id="addMoodButton">Add Mood</button>
+        <section id="mood-section">
+            <h2>Track Your Mood</h2>
+            <button id="track-mood">Track Mood</button>
+            <div id="mood-display" style="margin: 20px;"></div>
         </section>
 
-        <section>
-            <h2>Mood History</h2>
-            <ul id="moodHistoryList"></ul>
+        <section id="task-section">
+            <h2>Task List</h2>
+            <button id="add-task">Add Task</button>
+            <ul id="task-display" style="margin: 20px;"></ul>
         </section>
 
-        <section class="chart-section">
-            <h2>Mood Trend Chart</h2>
-            <div id="chartContainer"></div> <!-- Container for the chart -->
+        <section id="quote-section">
+            <h2>Motivational Quote</h2>
+            <div id="quote-display" style="font-style: italic; margin: 20px;"></div>
         </section>
 
-        <!-- Modal for adding additional mood details -->
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h2>Add More Details</h2>
-                <textarea id="moodDetails" placeholder="Enter more details about your mood..."></textarea>
-                <button class="styled-button" id="saveDetailsButton">Save Details</button>
-            </div>
-        </div>
+        <section id="reminder-section">
+            <h2>Set a Reminder</h2>
+            <button id="add-reminder">Add Reminder</button>
+        </section>
     </main>
 
-    <footer>
-        <p>© 2024 Mood Diary. All rights reserved.</p>
-    </footer>
-
-    <script>
-        // JavaScript to handle mood input and modal interactions
-        document.getElementById('addMoodButton').addEventListener('click', function() {
-            const moodInput = document.getElementById('moodInput').value;
-            const moodHistoryList = document.getElementById('moodHistoryList');
-            const listItem = document.createElement('li');
-            listItem.textContent = moodInput;
-
-            // Add click event to open modal for additional details
-            listItem.addEventListener('click', function() {
-                document.getElementById('myModal').style.display = 'block';
-                document.getElementById('moodDetails').value = ''; // Clear previous details
-            });
-
-            moodHistoryList.appendChild(listItem);
-            document.getElementById('moodInput').value = ''; // Clear input
-        });
-
-        // Close modal functionality
-        document.querySelector('.close-button').addEventListener('click', function() {
-            document.getElementById('myModal').style.display = 'none';
-        });
-
-        document.getElementById('saveDetailsButton').addEventListener('click', function() {
-            const moodDetails = document.getElementById('moodDetails').value;
-            alert('Details Saved: ' + moodDetails); // Replace with actual saving logic
-            document.getElementById('myModal').style.display = 'none'; // Close modal
-        });
-    </script>
+    <script src="enhancements.js"></script>
+    <script src="moodEnhancements.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
