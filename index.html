@@ -9,14 +9,14 @@
 <body>
     <h1>Mood Diary</h1>
     
-    <div>
+    <div class="input-container">
         <label for="moodInput">How do you feel today?</label>
         <input type="text" id="moodInput" placeholder="Enter your mood">
         
         <label for="moodTags">Tags (comma-separated):</label>
         <input type="text" id="moodTags" placeholder="e.g., happy, tired">
         
-        <button id="logMoodButton">Log Mood</button>
+        <button id="logMoodButton" class="styled-button">Log Mood</button>
     </div>
 
     <div id="moodHistoryContainer">
@@ -24,10 +24,32 @@
         <ul id="moodHistoryList"></ul>
     </div>
 
-    <!-- New buttons for additional functionalities -->
-    <button id="showChartButton">Show Mood Chart</button>
-    <button id="settingsButton">User Settings</button>
-    <button id="resetMoodButton">Reset Mood History</button>
+    <div id="chartContainer" class="chart-section" style="display: none;">
+        <h2>Mood Chart</h2>
+        <canvas id="moodChart"></canvas>
+    </div>
+
+    <button id="showChartButton" class="styled-button">Show Mood Chart</button>
+    <button id="settingsButton" class="styled-button">User Settings</button>
+    <button id="resetMoodButton" class="styled-button">Reset Mood History</button>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>User Settings</h2>
+            <label for="themeSelect">Select Theme:</label>
+            <select id="themeSelect">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+            </select>
+            <br><br>
+            <label for="notificationToggle">Enable Notifications:</label>
+            <input type="checkbox" id="notificationToggle" checked>
+            <br><br>
+            <button id="saveSettingsButton" class="styled-button">Save Settings</button>
+        </div>
+    </div>
 
     <script src="moodDiary.js"></script> <!-- Your existing JavaScript file -->
     <script src="enhancements.js"></script> <!-- Include the new enhancements file -->
