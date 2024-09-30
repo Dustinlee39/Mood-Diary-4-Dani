@@ -4,31 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mood Diary</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Mood Diary</h1>
-    <div>
-        <label for="moodInput">How do you feel today?</label>
-        <select id="moodInput">
-            <option value="happy">Happy</option>
-            <option value="sad">Sad</option>
-            <option value="anxious">Anxious</option>
-            <option value="angry">Angry</option>
-        </select>
-        <input type="text" id="moodTags" placeholder="Add tags (comma separated)" />
-        <button id="logMoodButton">Log Mood</button>
-    </div>
-    <div id="dailyPrompt">How did you feel today? What made you feel that way?</div>
-    <textarea id="dailyReflection" placeholder="Write your reflection here..."></textarea>
-    <button id="saveReflectionButton">Save Reflection</button>
+    <input type="text" id="moodInput" placeholder="Enter your mood (1-10)">
+    <input type="text" id="moodTags" placeholder="Enter tags (comma-separated)">
+    <button id="logMoodButton">Log Mood</button>
+    
+    <h2>Mood History</h2>
     <div id="moodHistoryContainer"></div>
-    <form id="feedbackForm">
-        <textarea id="feedback" placeholder="Your feedback here..." required></textarea>
-        <button type="submit">Submit Feedback</button>
-    </form>
-    <input type="file" id="fileInput" accept=".json" />
-    <button id="exportButton">Export Mood History</button>
+    
+    <div id="averageMoodContainer"></div>
+    
+    <input type="text" id="filterTagInput" placeholder="Filter by tag">
+    <button id="filterMoodButton">Filter Mood</button>
+    
     <script src="script.js"></script>
+    <script src="moodEnhancements.js"></script> <!-- Include new JS file -->
 </body>
 </html>
