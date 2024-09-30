@@ -1,3 +1,4 @@
+
 // moodEnhancements.js
 
 // Function to display a random motivational quote
