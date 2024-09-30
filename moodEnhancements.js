@@ -1,27 +1,21 @@
-
-// moodEnhancements.js
-
-// Function to display a random motivational quote
-function displayRandomQuote() {
-    const quotes = [
-        "Keep your face always toward the sunshine—and shadows will fall behind you.",
-        "The only way to do great work is to love what you do.",
-        "You are never too old to set another goal or to dream a new dream.",
-        "Believe you can and you're halfway there.",
-        "The future belongs to those who believe in the beauty of their dreams."
-    ];
-
-    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-    const quoteDisplay = document.getElementById('quote-display');
-    if (quoteDisplay) {
-        quoteDisplay.innerText = randomQuote;
-    }
+// Functions for Analyzing Mood
+function analyzeMoodEntries(entries) {
+    const positiveTrends = entries.filter(entry => entry.mood === "happy").length;
+    const negativeTrends = entries.filter(entry => entry.mood === "sad").length;
+    return { positive: positiveTrends, negative: negativeTrends };
 }
 
-// Function to initialize mood features
-function initializeMoodFeatures() {
-    displayRandomQuote();
+// Suggestions for Beneficial Activities
+function suggestActivities(currentMood) {
+    const activitySuggestions = {
+        happy: ["Go for a walk", "Listen to music", "Call a friend"],
+        sad: ["Practice meditation", "Watch a comedy", "Write in your journal"],
+    };
+    return activitySuggestions[currentMood] || [];
 }
 
-// Call the initialization function
-document.addEventListener('DOMContentLoaded', initializeMoodFeatures);
+// Goal Setting and Tracking
+function setMoodGoal(goal) {
+    const goals = JSON.parse(localStorage.getItem('moodGoals')) || [];
+    goals.push(goal);
+    localStorage.setItem('moodGoals', JSON.stringify(goals
