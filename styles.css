@@ -1,31 +1,122 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: #f4f4f4;
     margin: 0;
     padding: 20px;
 }
 
+/* Headings */
 h1 {
-    text-align: center;
+    color: #333;
 }
 
-div {
+h2 {
+    color: #444;
+}
+
+/* Input Container */
+.input-container {
     margin-bottom: 20px;
 }
 
-#moodHistoryContainer {
-    margin-top: 20px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    background-color: #fff;
-}
-
-#feedbackForm {
-    margin-top: 20px;
-}
-
-#feedbackForm textarea {
+/* Input Fields */
+input[type="text"], select {
     width: 100%;
-    height: 100px;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Makes width inclusive of padding and border */
+}
+
+/* Styled Button */
+.styled-button {
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px; /* Adds space above buttons */
+}
+
+.styled-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Mood History List */
+#moodHistoryList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#moodHistoryList li {
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+/* Chart Section */
+.chart-section {
+    margin-top: 20px;
+}
+
+#chartContainer {
+    width: 100%;
+    height: 400px; /* Set a height for the chart */
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .input-container, .chart-section {
+        margin: 10px;
+    }
+    
+    .styled-button {
+        width: 100%; /* Make buttons full width on small screens */
+    }
+    
+    .modal-content {
+        width: 90%; /* Adjust modal width on small screens */
+    }
 }
