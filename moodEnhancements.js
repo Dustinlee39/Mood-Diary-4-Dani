@@ -1,44 +1,26 @@
 // moodEnhancements.js
 
-// Function to calculate and display average mood rating
-function calculateAverageMood() {
-    const moodRatings = moodHistory.map(entry => {
-        const moodValue = parseInt(entry.mood); // Assume mood is a numerical value
-        return !isNaN(moodValue) ? moodValue : 0;
-    });
+// Function to display a random motivational quote
+function displayRandomQuote() {
+    const quotes = [
+        "Keep your face always toward the sunshine—and shadows will fall behind you.",
+        "The only way to do great work is to love what you do.",
+        "You are never too old to set another goal or to dream a new dream.",
+        "Believe you can and you're halfway there.",
+        "The future belongs to those who believe in the beauty of their dreams."
+    ];
 
-    const total = moodRatings.reduce((acc, rating) => acc + rating, 0);
-    const average = total / moodRatings.length || 0;
-
-    document.getElementById('averageMoodContainer').textContent = `Average Mood: ${average.toFixed(2)}`;
-}
-
-// Function to filter mood history by tag
-function filterMoodByTag(tag) {
-    const filteredMoodHistory = moodHistory.filter(entry => entry.tags.includes(tag));
-    displayMoodHistory(filteredMoodHistory);
-}
-
-// Function to display mood history with optional filtering
-function displayMoodHistory(filteredHistory = moodHistory) {
-    const moodHistoryContainer = document.getElementById('moodHistoryContainer');
-    moodHistoryContainer.innerHTML = '';
-
-    filteredHistory.forEach(entry => {
-        const entryDiv = document.createElement('div');
-        entryDiv.textContent = `Date: ${entry.date}, Mood: ${entry.mood}, Tags: ${entry.tags.join(', ')}`;
-        moodHistoryContainer.appendChild(entryDiv);
-    });
-
-    calculateAverageMood(); // Update average mood after displaying
-}
-
-// Event listener for tag filtering
-document.getElementById('filterMoodButton').addEventListener('click', () => {
-    const filterTag = document.getElementById('filterTagInput').value.trim();
-    if (filterTag) {
-        filterMoodByTag(filterTag);
-    } else {
-        displayMoodHistory(); // Show all moods if no filter is provided
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    const quoteDisplay = document.getElementById('quote-display');
+    if (quoteDisplay) {
+        quoteDisplay.innerText = randomQuote;
     }
-});
+}
+
+// Function to initialize mood features
+function initializeMoodFeatures() {
+    displayRandomQuote();
+}
+
+// Call the initialization function
+document.addEventListener('DOMContentLoaded', initializeMoodFeatures);
